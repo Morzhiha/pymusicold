@@ -44,10 +44,7 @@ class GetFrequency:
         print('t', len(t), max(t), t)
         print("start", start * sample_rate, end * sample_rate)
         frq, X = self.frequency_spectrum(y, sample_rate)
-
-        # print(len(frq), len(X))
-        # print(len(t[int(start * sample_rate): int(end * sample_rate)]), len(
-        #                       y[int(start * sample_rate): int(end * sample_rate)]))
+        
         self.showGraphics(t, y, 't', 'Amplitude', frq, X, 'Freq (Hz)', '|X(freq)|')
 
         print('frq', len(frq), frq)
@@ -56,28 +53,22 @@ class GetFrequency:
         freqs = freqs[range(len(freqs) // 2)]
         print('freqs', len(freqs), freqs)
 
-        # Graphics.showGraphics(t, y, 't', 'Amplitude', frq, X, 'Freq (Hz)', '|X(freq)|')
-
         ###################################
 
         print('____________________________________________________')
-        count = 2
+        count = 2   # количество измерений в секунду
         time_in_sec = np.linspace(start*sample_rate, end * sample_rate, math.ceil(end-start)*count+1)  # временной массив соответсвует каждой секунде
         print('tsec', len(time_in_sec), time_in_sec)
 
-        maxF = np.array([])  # zeros(len(time_in_sec))
-        tsec = np.array([])
+        maxF = np.array([])  # массив максимальных частот
+        tsec = np.array([]) # временной массив для maxF
         n = len(time_in_sec)
         domF = [[] for j in range(n)]
         self.dict_max_freq = dict()
         for j in range(n - 1):
             y1 = y0[int(time_in_sec[j]): int(time_in_sec[j + 1])]
-            print('y1', time_in_sec[j])
 
             frq, X = self.frequency_spectrum(y1, sample_rate)
-
-            self.showGraphics(t0[int(time_in_sec[j]):int(time_in_sec[j + 1])], y1, 't', 'Amplitude', frq, X, 'Freq (Hz)',
-                         '|X(freq)|')
 
             maxA = np.zeros(len(frq))
             maxANH = [0 for j in range(7)]
@@ -127,21 +118,22 @@ class GetFrequency:
         return figdata_png.decode('utf-8')
 
     def harmonic(self, val):
-        harmonic = {'1': [32.7, 61.75], '2': [65.41, 123.48], '3': [130.82, 247],'4': [261, 495],'5':[520, 990],'6': [1040, 2000], '7': [2010, 4000]}
+        harmonic = {'1': [32.703, 65.406], '2': [65.406, 130.81], '3': [130.81, 261.63], '4': [261.63, 523.25],
+                    '5': [523.25, 1046.5], '6': [1046.5, 2093], '7': [2093, 4000]}
 
-        if 32 <= val < 63:
-            return 1
-        if val < 32:
+        if val < 32.703:
             return 0
-        elif 63 <= val < 125:
+        elif 32.703 <= val < 65.406:
+            return 1
+        elif 65.406 <= val < 130.81:
             return 2
-        elif 125 <= val < 250:
+        elif 130.81 <= val < 261.63:
             return 3
-        elif 250 <= val < 510:
+        elif 261.63 <= val < 523.25:
             return 4
-        elif 510 <= val < 990:
+        elif 523.25 <= val < 1046.5:
             return 5
-        elif 990 <= val < 2000:
+        elif 1046.5 <= val < 2093:
             return 6
 
     def frequency_spectrum(self, x, sf):
@@ -170,7 +162,7 @@ class GetFrequency:
         plt.ylabel(yName)
 
         plt.subplot(2, 1, 2)
-        h = [32, 63, 126, 250, 510, 1000]
+        h = [32.703, 65.406, 130.81, 261.63, 523.25, 1046.5]
         plt.vlines(h, 0, y2.max(), color='g', linestyle='--')
         plt.plot(x2[0:len(x2) // 3], y2[0:len(y2) // 3])
         plt.xlabel(xName2)
