@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    width: 800px;
+    height: 600px;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.interval-container {
+    max-width: 415px;
+}
+
+.upload-song-container {
+    max-width: 400px;
+}
+
+.interval-end, .interval-start {
+    min-width: 200px;
+}
+
+.upload-song-button {
+    max-width: 150px;
+}
+
+.image {
+    display: block;
+    margin: 0 auto;
+}
+
+.numbers {
+    white-space: pre-wrap;
+}
